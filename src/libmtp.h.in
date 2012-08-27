@@ -477,6 +477,16 @@ typedef uint16_t (* MTPDataPutFunc)	(void* params, void* priv,
 					uint32_t sendlen, unsigned char *data, uint32_t *putlen);
 
 /**
+ * Callback function for use when enumerating the contents of a folder.
+ * The callback will be called once for each enumerated file.
+ * @param file the enumerated file
+ * @param data a user-defined dereferencable pointer
+ * @return if anything else than 0 is returned, the current enumeration will be
+ *         cancelled.
+ */
+typedef int (* LIBMTP_enumeratefunc_t)  (LIBMTP_file_t *file, void const * const data);
+
+/**
  * The return codes for the get/put functions
  */
 #define LIBMTP_HANDLER_RETURN_OK 0
@@ -878,6 +888,11 @@ LIBMTP_file_t *LIBMTP_Get_Filelisting_With_Callback(LIBMTP_mtpdevice_t *,
 LIBMTP_file_t * LIBMTP_Get_Files_And_Folders(LIBMTP_mtpdevice_t *,
 					     uint32_t const,
 					     uint32_t const);
+LIBMTP_file_t * LIBMTP_Get_Files_And_Folders_With_Callback(LIBMTP_mtpdevice_t *,
+					     uint32_t const,
+					     uint32_t const,
+					     LIBMTP_enumeratefunc_t const,
+					     void const * const);
 LIBMTP_file_t *LIBMTP_Get_Filemetadata(LIBMTP_mtpdevice_t *, uint32_t const);
 int LIBMTP_Get_File_To_File(LIBMTP_mtpdevice_t*, uint32_t, char const * const,
 			LIBMTP_progressfunc_t const, void const * const);

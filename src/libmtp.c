@@ -4346,6 +4346,30 @@ LIBMTP_file_t * LIBMTP_Get_Files_And_Folders(LIBMTP_mtpdevice_t *device,
 			     uint32_t const storage,
 			     uint32_t const parent)
 {
+  return LIBMTP_Get_Files_And_Folders_With_Callback(device, storage, parent, NULL, NULL);
+}
+
+/**
+ * This function retrieves the contents of a certain folder
+ * with id parent on a certain storage on a certain device.
+ * The result contains both files and folders.
+ * The device used with this operations must have been opened with
+ * LIBMTP_Open_Raw_Device_Uncached() or it will fail.
+ *
+ * NOTE: the request will always perform I/O with the device.
+ * @param device a pointer to the MTP device to report info from.
+ * @param storage a storage on the device to report info from. If
+ *        0 is passed in, the files for the given parent will be
+ *        searched across all available storages.
+ * @param parent the parent folder id.
+ */
+LIBMTP_file_t * LIBMTP_Get_Files_And_Folders_With_Callback(
+                             LIBMTP_mtpdevice_t *device,
+			     uint32_t const storage,
+			     uint32_t const parent,
+			     LIBMTP_enumeratefunc_t const callback,
+			     void const * const data)
+{
   PTPParams *params = (PTPParams *) device->params;
   PTP_USB *ptp_usb = (PTP_USB*) device->usbinfo;
   LIBMTP_file_t *retfiles = NULL;
@@ -4409,6 +4433,19 @@ LIBMTP_file_t * LIBMTP_Get_Files_And_Folders(LIBMTP_mtpdevice_t *device,
     } else {
       curfile->next = file;
       curfile = file;
+    }
+
+    if (callback != NULL) {
+      int ret = callback(file, data);
+      if (ret != 0) {
+        while (retfiles != NULL) {
+          file = retfiles;
+          retfiles = retfiles->next;
+          LIBMTP_destroy_file_t(file);
+        }
+        add_error_to_errorstack(device, LIBMTP_ERROR_CANCELLED, "LIBMTP_Get_Files_And_Folders_With_Callback(): Cancelled.");
+        break;
+      }
     }
   }
 
