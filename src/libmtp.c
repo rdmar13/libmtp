@@ -3863,6 +3863,18 @@ int LIBMTP_Get_Device_Certificate(LIBMTP_mtpdevice_t *device, char ** const devc
 }
 
 /**
+ * This function checks if a given operation is supported by the device.
+ * @param device a pointer to the device to check for support.
+ * @param the op code for the operation in question
+ * @return 1 on success, 0 on failure
+ */
+int
+LIBMTP_Is_Operation_Supported(LIBMTP_mtpdevice_t *device, uint16_t operation)
+{
+  return ptp_operation_issupported(device->params, operation);
+}
+
+/**
  * This function retrieves a list of supported file types, i.e. the file
  * types that this device claims it supports, e.g. audio file types that
  * the device can play etc. This list is mitigated to

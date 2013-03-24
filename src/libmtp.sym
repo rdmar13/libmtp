@@ -24,6 +24,7 @@ LIBMTP_Get_Batterylevel
 LIBMTP_Get_Secure_Time
 LIBMTP_Get_Device_Certificate
 LIBMTP_Get_Supported_Filetypes
+LIBMTP_Is_Operation_Supported
 LIBMTP_Get_Errorstack
 LIBMTP_Clear_Errorstack
 LIBMTP_Dump_Errorstack
