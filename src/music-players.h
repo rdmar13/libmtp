@@ -2128,6 +2128,8 @@
       DEVICE_FLAGS_ANDROID_BUGS },
   { "Hewlett-Packard", 0x0bb4, "HP Touchpad (MTP+ADB)", 0x6860,
       DEVICE_FLAGS_ANDROID_BUGS },
+  // HTC Windows Phone
+  { "HTC", 0x0bb4, "HTC 8X", 0x0ba1, DEVICE_FLAG_NONE },
 #if 0
   { "HTC", 0x0bb4, "Android Device ID2 (Zopo, HD2...)", 0x2008,
       DEVICE_FLAGS_ANDROID_BUGS },
